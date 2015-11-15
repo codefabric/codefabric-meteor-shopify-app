@@ -12,10 +12,20 @@ namespace 'CodeFabric.Shopify', (ns) ->
     constructor: (settings) ->
       check settings, 
         shop: String,
+        apiKey: String
         redirectType: Match.Optional Match.OneOf(App.RedirectTypes.Page, App.RedirectTypes.IFrame, App.RedirectTypes.NewTab)
+        isEmbedded: Match.Optional(Boolean)
 
       @shop = settings.shop
-      @redirectType = settings.redirectType || App.RedirectTypes.Page
+      @redirectType = settings.redirectType 
+      @isEmbedded = settings.isEmbedded || true
+      @apiKey = settings.apiKey
+
+      if !@redirectType?
+        if @isEmbedded 
+          @redirectType = App.RedirectTypes.IFrame
+        else
+          @redirectType = App.RedirectTypes.Page
 
       super()
 
@@ -28,6 +38,10 @@ namespace 'CodeFabric.Shopify', (ns) ->
             if (@handleError error)
               if result.isAuthorised
                 @createAPI()
+
+                if @isEmbedded
+                  @initShopifyESDK()
+
                 if callback
                   callback @, true
               else
@@ -44,6 +58,10 @@ namespace 'CodeFabric.Shopify', (ns) ->
             if (@handleError error)
               if result.isAuthorised
                 @createAPI()
+
+                if @isEmbedded
+                  @initShopifyESDK()
+
                 if callback
                   callback @
               else
@@ -68,6 +86,15 @@ namespace 'CodeFabric.Shopify', (ns) ->
         params[k] = v
       
       return { host: host, path: path, params: params }
+
+    initShopifyESDK: ->
+      if ShopifyApp?
+        ShopifyApp.init
+          apiKey: @apiKey
+          shopOrigin: "https://#{@shop}.myshopify.com/"   
+          debug: Meteor.settings.public.debug
+
+        ShopifyApp.Bar.loadingOff()
 
     createAPI: ->
       @api = new ns.Api

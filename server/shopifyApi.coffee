@@ -48,10 +48,10 @@ namespace 'CodeFabric.Shopify', (ns) ->
         options: { }
 
       allParams = params || { }
-      if Meteor.settings.debug
+      if Meteor.settings.public.debug
         console.log allParams
       for name, value of allParams
-        if Meteor.settings.debug
+        if Meteor.settings.public.debug
           console.log "name: #{name}, value: #{value}"
         if (request.url.indexOf "\#{#{name}}") > 0
           request.url = request.url.replace "\#{#{name}}", value
@@ -93,7 +93,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
     makeRequestAsync: (request, callback) =>
       @tryExecute () ->
 
-        if Meteor.settings.debug
+        if Meteor.settings.public.debug
           console.log 'Performing ' + request.method + ' request to ' + request.url
           console.log 'Options:'
           console.log request.options

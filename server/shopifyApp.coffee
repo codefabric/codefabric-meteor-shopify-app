@@ -66,7 +66,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
       if isAuthorised
         if !@api[shop.name]
-          if Meteor.settings.debug
+          if Meteor.settings.public.debug
             console.log "Creating API for #{shop.name}"
           @api[shop.name] = new ns.Api shop
 
@@ -80,7 +80,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
     buildAuthUrl: (shop) ->
       authUrl = "https://#{shop.name}.myshopify.com/admin/oauth/authorize?client_id=#{@apiKey}&scope=#{@scope.join(',')}&redirect_uri=#{encodeURIComponent(@redirectUrl)}&state=#{shop._id}"
-      if Meteor.settings.debug
+      if Meteor.settings.public.debug
         console.log "Built auth url: #{authUrl}"
 
       return authUrl
@@ -111,7 +111,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
         shop = collections.Shops.findOne({_id: shop._id})
 
         #Create the server API
-        if Meteor.settings.debug
+        if Meteor.settings.public.debug
           console.log "Creating API for #{shopName}"
         @api[shopName] = new ns.Api shop
 
@@ -138,12 +138,12 @@ namespace 'CodeFabric.Shopify', (ns) ->
         message = params.join '&'
 
         generated = CryptoJS.HmacSHA256(message, @secret).toString()
-        if Meteor.settings.debug
+        if Meteor.settings.public.debug
           console.log "Generated HMAC: #{generated} (#{generated.length})"
           console.log "Supplied HMAC: #{hmac} (#{hmac.length})"
         
         isValid = (hmac == generated)
-        if Meteor.settings.debug
+        if Meteor.settings.public.debug
           console.log "is valid: #{isValid}"
 
         return isValid
@@ -155,7 +155,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
       try
         tokenUrl = "https://#{shop.name}.myshopify.com/admin/oauth/access_token"
 
-        if Meteor.settings.debug
+        if Meteor.settings.public.debug
           console.log "Token URL: #{tokenUrl}"
           console.log "Data: #{@apiKey}, #{@secret}, #{code}"
 
@@ -168,7 +168,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
         if response.statusCode == 200
           return response.data.access_token
         else
-          if Meteor.settings.debug
+          if Meteor.settings.public.debug
             console.log response
           throw new Meteor.Error 'auth-failed', "Shopify token request failed with status #{response.statusCode}"
 

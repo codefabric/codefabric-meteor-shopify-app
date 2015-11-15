@@ -18,6 +18,7 @@ Package.onUse(function(api) {
            'mongo',
            'underscore',
            'http',
+           'mizzao:build-fetcher',
            'jparker:crypto-core',
            'jparker:crypto-sha256',
            'jparker:crypto-hmac',
@@ -60,7 +61,8 @@ Package.onUse(function(api) {
     'client/redirectors/iFrameRedirector.coffee',
     'client/shopifyApi.coffee',
     'client/shopifyApp.coffee',
-    'client/lib/shopifyESDKView.coffee'
+    'client/lib/shopifyESDKView.coffee',
+    'client/lib/shopify-esdk.fetch.json'
   ], ['client']);
 
   api.addFiles([
