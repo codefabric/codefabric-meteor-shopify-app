@@ -13,6 +13,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
       options = settings || { }
 
+      @currentReqs = 0
       @callQueue = []
       @maxCallLimit = options.maxCallLimit || 35
       @currentCallLimit = 0
@@ -70,8 +71,11 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
       return request
 
-    tryExecute: (func) ->
+    tryExecute: (func) =>
       if @currentCallLimit < @maxCallLimit
+        if Meteor.settings.public.debug
+          console.log 'Executing function immediately'
+
         Meteor.setTimeout func, 0
       
       else
@@ -80,18 +84,28 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
         @callQueue.push func
 
-    processCallQueue: () ->
+    processCallQueue: () =>
       if @callQueue.length > 0
-        func = @callQueue[0]
-        @callQueue = @callQueue[1..(@callQueue.length - 1)]
+        
+        if Meteor.settings.public.debug
+          id = (new Mongo.ObjectID()).valueOf()
+          console.log "Waiting to execute function : #{id}"
 
-        Meteor.setTimeout (() ->
-          Meteor.setTimeout func, 0
-          @processCallQueue
+        Meteor.setTimeout (() =>
+          try
+            Meteor.setTimeout @processCallQueue, 0
+
+            func = @callQueue.shift() # Take the first array element
+            if Meteor.settings.public.debug
+              console.log "Executing function now : #{id}"
+            func()
+          catch e
+            console.log "Error processing queue: #{e}"
         ), 500
 
     makeRequestAsync: (request, callback) =>
-      @tryExecute () ->
+      @tryExecute () =>
+        @currentReqs += 1
 
         if Meteor.settings.public.debug
           console.log 'Performing ' + request.method + ' request to ' + request.url
@@ -106,6 +120,9 @@ namespace 'CodeFabric.Shopify', (ns) ->
             if callLimitValues.length > 0
               callLimitValue = Number callLimitValues[0]
               unless (isNaN callLimitValue)
+                if Meteor.settings.public.debug
+                  console.log "Modifying call limit to: #{callLimitValue}"
+
                 @currentCallLimit = callLimitValue
 
           if 200 <= response.statusCode < 299
@@ -117,6 +134,8 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
         catch err
           callback err, null
+        finally
+          @currentReqs -= 1
 
   return ['Api', Api]
 

@@ -18,7 +18,7 @@ Package.onUse(function(api) {
            'mongo',
            'underscore',
            'http',
-           'mizzao:build-fetcher',
+           'mizzao:build-fetcher@0.3.0',
            'jparker:crypto-core',
            'jparker:crypto-sha256',
            'jparker:crypto-hmac',
@@ -61,7 +61,10 @@ Package.onUse(function(api) {
     'client/redirectors/iFrameRedirector.coffee',
     'client/shopifyApi.coffee',
     'client/shopifyApp.coffee',
-    'client/lib/shopifyESDKView.coffee',
+    'client/lib/shopifyESDKView.coffee'
+  ], ['client']);
+
+  api.addFiles([
     'client/lib/shopify-esdk.fetch.json'
   ], ['client']);
 
@@ -73,13 +76,15 @@ Package.onUse(function(api) {
   ], ['server']);
 });
 
-Package.onTest(function(api) {
-  api.use(['ecmascript',
-           'coffeescript',
-           'tinytest',
-           'mongo']);
-  api.use('codefabric:meteor-shopify-app');
+// Package.onTest(function(api) {
+//   api.versionsFrom('1.2.1');
+//   api.use(['ecmascript',
+//            'coffeescript',
+//            'tinytest',
+//            'mizzao:build-fetcher@0.3.0',
+//            'mongo']);
+//   api.use('codefabric:meteor-shopify-app');
 
-  api.addFiles('tests/client/tests.coffee', 'client');
-  api.addFiles('tests/server/tests.coffee', 'server');
-});
+//   api.addFiles('tests/client/tests.coffee', 'client');
+//   api.addFiles('tests/server/tests.coffee', 'server');
+//});
