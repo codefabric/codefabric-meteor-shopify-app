@@ -43,6 +43,34 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
       super()
 
+    authenticate: (shopName, hmacParams) =>
+      #Validate hmac...
+      console.log 'Server-side authenticattion...'
+      shop = collections.Shops.findOne({ name: shopName })
+      if shop
+        isAuthorised = shop.hasToken
+
+      if isAuthorised
+        if !@api[shop.name]
+          if Meteor.settings.public.debug
+            console.log "Creating API for #{shop.name}"
+          @api[shop.name] = new ns.Api shop
+
+        if @onAuthCallback
+          @onAuthCallback @api[shop.name]
+
+        return { isAuthorised: true }
+
+      return { isAuthorised: false }
+
+    clone: (obj) =>
+      return obj if obj is null or typeof (obj) isnt "object"
+      temp = new obj.constructor()
+      for key of obj
+        temp[key] = @clone obj[key]
+
+      return temp
+
     setupMeteorMethods: ->
       methods = { }
 
@@ -125,9 +153,9 @@ namespace 'CodeFabric.Shopify', (ns) ->
         @handleError err
         throw err
 
-    validateHmac: (hmac, hmacParams) ->
+    validateHmac: (hmac, hmacParams) =>
       try
-        messageParams = hmacParams
+        messageParams = @clone hmacParams
         if messageParams.hmac
           delete messageParams.hmac
         if messageParams.signature
