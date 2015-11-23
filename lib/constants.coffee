@@ -4,6 +4,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
       CheckAuth: 'CodeFabric.Shopify.App.CheckAuth'
       CompleteAuth: 'CodeFabric.Shopify.App.CompleteAuth'
       CallApiMethod: 'CodeFabric.Shopify.Api.CallMethod'
+      CallApiConcatMethod: 'CodeFabric.Shopify.Api.CallConcatMethod'
 
     @CollectionNames =
       Shops: 'CodeFabric.Shopify.Collections.Shops'

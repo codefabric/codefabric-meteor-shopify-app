@@ -1076,5 +1076,28 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
   Object.freeze ns.ApiMethods
 
-  return ['ApiMethods', ns.ApiMethods]
+  ns.ApiConcatMethods = 
+    getAllOrders:
+        count: 'countOrders'
+        fetch: 'getOrders'
+
+    getAllProducts:
+        count: 'countProducts'
+        fetch: 'getProducts'
+
+    getAllProductMetafields:
+        count: 'countProductMetafields'
+        fetch: 'getProductMetafields'
+
+    getAllCollects:
+        count: 'countCollects'
+        fetch: 'getCollects'
+
+    getAllCustomers:
+        count: 'countCustomers'
+        fetch: 'getCustomers'
+
+  Object.freeze ns.ApiConcatMethods
+
+  return ['ApiMethods', ns.ApiMethods, 'ApiConcatMethods', ns.ApiConcatMethods]
   
