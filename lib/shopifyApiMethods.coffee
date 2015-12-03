@@ -1074,6 +1074,42 @@ namespace 'CodeFabric.Shopify', (ns) ->
         url: '/admin/products/#{productId}/images/#{id}.json',
         description: 'Remove a Product Image from the database'
 
+    # ScriptTags 
+    getScriptTags:
+        method: 'GET'
+        url: '/admin/script_tags.json'
+        description: 'Receive a list of all ScriptTags'
+        returns: 'script_tags'
+
+    countScriptTags:
+        method: 'GET'
+        url: '/admin/script_tags.count.json'
+        returns: 'count'
+        description: 'Receive a count of all ScriptTags'
+
+    getScriptTag:
+        method: 'GET'
+        url: '/admin/script_tags/#{id}.json'
+        returns: 'script_tag'
+        description: 'Receive a single ScriptTag'
+
+    createScriptTag:
+        method: 'POST'
+        url: '/admin/script_tags.json'
+        returns: 'script_tag'
+        description: 'Creates a new ScriptTag'
+
+    modifyScriptTag:
+        method: 'PUT'
+        url: '/admin/script_tags/#{id}.json'
+        returns: 'script_tag'
+        description: 'Modify an existing ScriptTag'
+
+    removeScriptTag:
+        method: 'DELETE'
+        url: '/admin/script_tags/#{id}.json'
+        description: 'Removes an existing ScriptTag'
+
   Object.freeze ns.ApiMethods
 
   ns.ApiConcatMethods = 
