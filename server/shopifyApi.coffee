@@ -2,11 +2,12 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
   class Api extends ns.ApiBase
     constructor: (shop, settings) ->
-      check shop,
+      check shop, Match.ObjectIncluding(
         _id: String
         name: String
         token: String
         hasToken: Boolean
+      )
       check settings, Match.Optional(Object)
 
       @shop = shop
