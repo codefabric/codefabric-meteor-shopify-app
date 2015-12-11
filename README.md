@@ -2,9 +2,9 @@
 
 This package provides a foundation on which to build Shopify Apps using Meteor.  It wraps the OAuth process to make it simpler to authorise your app, as well as wrapping the Shopify API and providing access to the Shopify Embedded App SDK.
 
-This package was inspired by the (great Shopify API package by froatsnook)[https://atmospherejs.com/froatsnook/shopify].
+This package was inspired by the [great Shopify API package by froatsnook](https://atmospherejs.com/froatsnook/shopify).
 
-Details of how (and why) this package was created can be found in the (CodeFabric - Shopify App Development series)[http://codefabric.co.uk/development/shopify-app-development/].
+Details of how (and why) this package was created can be found in the [CodeFabric - Shopify App Development series](http://codefabric.co.uk/development/shopify-app-development/).
 
 ## Package usage
 
@@ -14,7 +14,7 @@ Include the package in your project:
 
 ## Basic usage
 
-For advanced and detailed usage information, please refer to (CodeFabric - Shopify App Meteor package usage)[http://codefabric.co.uk/meteor/shopify-app-meteor-package-usage/].
+For advanced and detailed usage information, please refer to [CodeFabric - Shopify App Meteor package usage](http://codefabric.co.uk/meteor/shopify-app-meteor-package-usage/).
 
 ### Authentication
 
@@ -63,7 +63,7 @@ If using Iron Router, it is useful to place the `authenticate()` call in a `befo
 
 ### API usage
 
-Once authenticated, the `App` object exposes an `api` property, which gives access to the (Shopify API)[https://docs.shopify.com/api].
+Once authenticated, the `App` object exposes an `api` property, which gives access to the [Shopify API](https://docs.shopify.com/api).
 
 Each of the standard methods of the API are exposed on the `api` object:
 
@@ -94,8 +94,8 @@ NB: Get... methods will only return the default of 50 items.  Limit and page par
 
 ### Throttling and rate limiting
 
-The API will automatically throttle calls to Shopify to comply with the (API call limit)[https://docs.shopify.com/api/introduction/api-call-limit].
+The API will automatically throttle calls to Shopify to comply with the [API call limit](https://docs.shopify.com/api/introduction/api-call-limit).
 
-For advanced and detailed usage information, please refer to (CodeFabric - Shopify App Meteor package usage)[http://codefabric.co.uk/meteor/shopify-app-meteor-package-usage/].
+For advanced and detailed usage information, please refer to [CodeFabric - Shopify App Meteor package usage](http://codefabric.co.uk/meteor/shopify-app-meteor-package-usage/).
 
 
