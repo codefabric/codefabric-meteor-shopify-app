@@ -1,10 +1,10 @@
 Package.describe({
   name: 'codefabric:meteor-shopify-app',
-  version: '0.0.1',
+  version: '0.1.0',
   // Brief, one-line summary of the package.
-  summary: '',
+  summary: 'Wraps the Shopify API and OAuth, and a base for Shopify Apps written in Meteor',
   // URL to the Git repository containing the source code for this package.
-  git: '',
+  git: 'https://github.com/codefabric/codefabric-meteor-shopify-app.git',
   // By default, Meteor will default to using README.md for documentation.
   // To avoid submitting documentation, set this field to null.
   documentation: 'README.md'
@@ -19,11 +19,11 @@ Package.onUse(function(api) {
            'underscore',
            'http',
            'mizzao:build-fetcher@0.3.0',
-           'jparker:crypto-core',
-           'jparker:crypto-sha256',
-           'jparker:crypto-hmac',
-           'codefabric:meteor-common',
-           'codefabric:meteor-shopify'], 
+           'jparker:crypto-core@0.1.0',
+           'jparker:crypto-hmac@0.1.0',
+           'jparker:crypto-sha256@0.1.1',
+           'codefabric:meteor-common@0.1.0',
+           'codefabric:meteor-shopify@0.1.0'], 
           ['client', 'server']);
 
   // *** Standard CodeFabric Structure *** //
