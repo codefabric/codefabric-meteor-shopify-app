@@ -27,55 +27,30 @@ namespace 'CodeFabric.Shopify', (ns) ->
         else
           @redirectType = App.RedirectTypes.Page
 
+      if @isEmbedded
+        @initShopifyESDK()
+        
       super()
 
     authenticate: (callback) ->
       url = @parseCurrentUrl()
 
-      if (@isAuthCallback url)
-        Meteor.call(ns.MethodNames.CompleteAuth, @shop, url.params, (error, result) =>
-          try
-            if (@handleError error)
-              if result.isAuthorised
-                @createAPI()
+      Meteor.call(ns.MethodNames.Authenticate, @shop, url.params, (error, result) =>
+        try
+          if (@handleError error)
+            if result.isAuthorised
+              @createAPI()
 
-                if @isEmbedded
-                  @initShopifyESDK()
-
-                if callback
-                  callback @, true
-              else
-                throw new Meteor.Error 'authorisation-failure', 'Authorisation for the app has failed!'
+              if callback
+                callback @
             else
-              throw error
-          catch err
-            @handleError err
-            throw err
-        )
-      else
-        Meteor.call(ns.MethodNames.CheckAuth, @shop, (error, result) =>
-          try
-            if (@handleError error)
-              if result.isAuthorised
-                @createAPI()
-
-                if @isEmbedded
-                  @initShopifyESDK()
-
-                if callback
-                  callback @
-              else
-                @authoriseApp result.authUrl
-
-            else 
-              throw error
-          catch err
-            @handleError err
-            throw err
-        )
-
-    isAuthCallback: (url) ->
-      return (url.params.code? and url.params.hmac? and url.params.timestamp? and url.params.state?)
+              @authoriseApp result.authUrl
+          else
+            throw error
+        catch err
+          @handleError err
+          throw err
+      )
 
     parseCurrentUrl: () ->
       host = location.host
@@ -91,7 +66,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
       if ShopifyApp?
         ShopifyApp.init
           apiKey: @apiKey
-          shopOrigin: "https://#{@shop}.myshopify.com/"   
+          shopOrigin: "https://#{@shop}.myshopify.com"   
           debug: Meteor.settings.public.debug
 
         ShopifyApp.Bar.loadingOff()

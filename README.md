@@ -10,7 +10,9 @@ Details of how (and why) this package was created can be found in the [CodeFabri
 
 Include the package in your project:
 
-` meteor add codefabric:meteor-shopify-app
+```
+meteor add codefabric:meteor-shopify-app
+```
 
 ## Basic usage
 
@@ -20,7 +22,7 @@ For advanced and detailed usage information, please refer to [CodeFabric - Shopi
 
 On the server, at startup, create a new Shopify App, providing your App name (for the Embedded App title bar), API key, secret, and an optional auth callback function:
 
-```
+```javascript
 var shopifyApp = new CodeFabric.Shopify.App({
                     name: "My Awesome App",
                     apiKey: "s0m3Shop1fyAP1K3y",
@@ -36,7 +38,7 @@ var shopifyApp = new CodeFabric.Shopify.App({
 
 On the client, create a new Shopify App, providing the shop name, your API key and an optional auth callback function:
 
-```
+```javascript
 var shopifyApp = new CodeFabric.Shopify.App({
                     shop: "someshop.myshopify.com",
                     apiKey: "s0m3Shop1fyAP1K3y"
@@ -47,7 +49,7 @@ var shopifyApp = new CodeFabric.Shopify.App({
 
 Then authenticate the app by calling `authenticate()` on the client:
 
-```
+```javascript
 shopifyApp.authenticate();
 ```
 
@@ -55,7 +57,7 @@ This will redirect the user to the app authorisation page within the store, whic
 
 When redirected, your client must call `authenticate()` again, in order to retrieve a permanent token:
 
-```
+```javascript
 shopifyApp.authenticate();
 ```
 
@@ -67,7 +69,7 @@ Once authenticated, the `App` object exposes an `api` property, which gives acce
 
 Each of the standard methods of the API are exposed on the `api` object:
 
-```
+```javascript
 var products = shopifyApp.api.getProducts();
 var orders = shopifyApp.api.getOrders();
 var customers = shopifyApp.getCustomers();

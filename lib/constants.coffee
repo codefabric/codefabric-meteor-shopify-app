@@ -1,8 +1,7 @@
 namespace 'CodeFabric.Shopify', (ns) ->
 
     @MethodNames =
-      CheckAuth: 'CodeFabric.Shopify.App.CheckAuth'
-      CompleteAuth: 'CodeFabric.Shopify.App.CompleteAuth'
+      Authenticate: 'CodeFabric.Shopify.App.Authenticate'
       CallApiMethod: 'CodeFabric.Shopify.Api.CallMethod'
       CallApiConcatMethod: 'CodeFabric.Shopify.Api.CallConcatMethod'
 

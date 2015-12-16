@@ -45,7 +45,7 @@ namespace 'CodeFabric.Shopify', (ns) ->
 
     authenticate: (shopName, hmacParams) =>
       #Validate hmac...
-      console.log 'Server-side authenticattion...'
+      console.log 'Server-side authentication...'
       shop = collections.Shops.findOne({ name: shopName })
       if shop
         isAuthorised = shop.hasToken
@@ -74,15 +74,26 @@ namespace 'CodeFabric.Shopify', (ns) ->
     setupMeteorMethods: ->
       methods = { }
 
-      methods[ns.MethodNames.CheckAuth] = (shopName) -> ns.App.current.checkAuth @, shopName
-      methods[ns.MethodNames.CompleteAuth] = (shopName, responseParams) -> ns.App.current.completeAuth @, shopName, responseParams
+      methods[ns.MethodNames.Authenticate] = (shopName, responseParams) -> 
+        check shopName, String
+        check responseParams, Match.ObjectIncluding
+          hmac: String
+          timestamp: String
+
+        if (ns.App.current.validateHmac responseParams.hmac, responseParams)
+          if (responseParams.code?)
+            return ns.App.current.completeAuth @, shopName, responseParams
+          else
+            return ns.App.current.checkAuth @, shopName
+        else
+          throw new Meteor.Error 'request-invalid', 'Invalid Shopify request', 'Invalid HMAC'
 
       Meteor.methods methods
 
     getShopAPI: (shop) ->
       return @api[shop]
 
-    checkAuth: (conn, shopName) =>
+    checkAuth: (conn, shopName, responseParams) =>
       isAuthorised = false
 
       shop = collections.Shops.findOne({ name: shopName })
@@ -120,14 +131,10 @@ namespace 'CodeFabric.Shopify', (ns) ->
         code: String
 
       try
-        # Verify that the requet came from us - i.e. the state matches the id of shopName
+        # Verify that the request came from us - i.e. the state matches the id of shopName
         shop = collections.Shops.findOne({ _id: responseParams.state, name: shopName })
         unless shop
           throw new Meteor.Error 'invalid-auth-res', 'The validation response is invalid!', 'Could not find shop ' + shopName + ' with id ' + responseParams.state
-
-        # Validate the hmac
-        unless (@validateHmac responseParams.hmac, responseParams)
-          throw new Meteor.Error 'invalid-auth-res', 'The validation response is invalid!', 'HMAC was invalid'
 
         # Retrieve a permanent token
         token = @requestPermanentToken shop, responseParams.code
@@ -162,8 +169,8 @@ namespace 'CodeFabric.Shopify', (ns) ->
           delete messageParams.signature
 
         params = []
-        params.push "#{key}=#{value}" for key, value of messageParams
-        message = params.join '&'
+        params.push "#{key}=#{decodeURIComponent(value)}" for key, value of messageParams
+        message = params.sort().join '&'
 
         generated = CryptoJS.HmacSHA256(message, @secret).toString()
         if Meteor.settings.public.debug
